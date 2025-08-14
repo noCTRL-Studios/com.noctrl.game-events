@@ -1,0 +1,21 @@
+{
+    "name": "com.noctrl.game-events",
+    "displayName": "noCTRL Game Events",
+    "version": "1.0.0",
+    "unity": "2021.3",
+    "description": "Adds performant, extensible in-game events as reusable assets that can be referenced throughout your project.",
+    "author": {
+        "name": "noCTRL Studios",
+        "email": "SilasHafeli@noctrlstudios.com",
+        "url": "https://noctrlstudios.com"
+    },
+    "keywords": [
+        "system",
+        "events",
+        "gameplay",
+        "tools",
+        "utility"
+    ],
+    "category": "System",
+    "dependencies": {}
+}
