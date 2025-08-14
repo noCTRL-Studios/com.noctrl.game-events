@@ -15,6 +15,11 @@ Create events as assets, reference them anywhere in your project, and decouple y
 
 ---
 
+##  Crediting noCTRL Studios  
+If you use this package, you must credit **noCTRL Studios** and include a link to its GitHub (https://github.com/noCTRL-Studios) in your project docs, README, or credits. See the full license in `LICENSE.md`.
+
+---
+
 ## 📦 Installation
 
 ### Unity Package Manager (Git URL)
