@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa096b4f2bb718049aee28d27404148b, type: 3}
   m_Name: SampleEvent
   m_EditorClassIdentifier: NoCtrl.GameEvents::GameEvent
-  DebugLogging: 0
+  DebugLogging: 1
