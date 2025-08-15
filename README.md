@@ -9,14 +9,17 @@ Create events as assets, reference them anywhere in your project, and decouple y
 - **ScriptableObject-based events** for easy reusability and scene independence.
 - **Strong decoupling** between event senders and listeners.
 - **Lightweight & performant** runtime.
-- **Custom Editor tools** for easy debugging and event management.
-- **Sample scenes** to get started immediately.
+- **Custom Editor tools** for debugging and event management.
+- **Sample scenes** to get started quickly.
 - Fully compatible with **Unity 2021.3+**.
 
 ---
 
-##  Crediting noCTRL Studios  
-If you use this package, you must credit **noCTRL Studios** and include a link to its GitHub (https://github.com/noCTRL-Studios) in your project docs, README, or credits. See the full license in `LICENSE.md`.
+## 📜 Crediting noCTRL Studios
+If you use this package, you must credit **noCTRL Studios** and include a link to its GitHub repository:  
+[https://github.com/noCTRL-Studios](https://github.com/noCTRL-Studios)  
+Include this in your project documentation, README, or game credits.  
+See `LICENSE.md` for full details.
 
 ---
 
@@ -24,14 +27,14 @@ If you use this package, you must credit **noCTRL Studios** and include a link t
 
 ### Unity Package Manager (Git URL)
 1. Open Unity → **Window** → **Package Manager**.
-2. Click the **+** button → **Add package from git URL...**
+2. Click the **+** button → **Add package from git URL…**
 3. Paste:
     ```text
     https://github.com/noCTRL-Studios/Unity-Game-Events.git
     ```
 
 ### Using a Specific Version
-You can target a specific release by appending `#vX.Y.Z` to the URL:
+Append `#vX.Y.Z` to target a specific release:
 ```text
 https://github.com/noCTRL-Studios/Unity-Game-Events.git#v1.0.0
 ```
@@ -41,9 +44,9 @@ https://github.com/noCTRL-Studios/Unity-Game-Events.git#v1.0.0
 ## 🚀 Quick Start
 
 ### 1. Create an Event Asset
-1. Right-click in the **Project** window.
-2. Select **Create → Game Events → New Game Event**.
-3. Name it (e.g., `OnCoinCollected`).
+1. Right-click in the **Project** window.  
+2. Select **Create → Game Events → New Game Event**.  
+3. Name it (e.g., `OnCoinCollected`).  
 
 ### 2. Raise an Event in Code
 ```csharp
@@ -55,36 +58,17 @@ public class Coin : MonoBehaviour
 
     public void Collect()
     {
-        OnCoinCollected.Raise();
+        OnCoinCollected.RaiseAll();
         Destroy(gameObject);
     }
 }
 ```
 
 ### 3. Listen for the Event
-```csharp
-using UnityEngine;
-
-public class ScoreListener : MonoBehaviour
-{
-    public GameEvent OnCoinCollected;
-
-    private void OnEnable()
-    {
-        OnCoinCollected.Register(OnCoinCollectedHandler);
-    }
-
-    private void OnDisable()
-    {
-        OnCoinCollected.Unregister(OnCoinCollectedHandler);
-    }
-
-    private void OnCoinCollectedHandler()
-    {
-        Debug.Log("Coin collected! Updating score...");
-    }
-}
-```
+Use the built-in **GameEvent Listener** component:  
+1. Add the listener component to a GameObject.  
+2. Drag your **GameEvent** asset into the component’s Event field.  
+3. Select a response from the available prefab functions.  
 
 ---
 
@@ -93,18 +77,18 @@ A ready-to-use example scene is included in:
 ```
 Samples~/Basic Usage
 ```
-This demo shows how to:
-- Create and raise events
-- Listen and respond to them
-- Debug events in the Inspector
+Demonstrates:
+- Creating and raising events
+- Listening and responding to events
+- Debugging events in the Inspector
 
 ---
 
 ## 📂 Project Structure
 ```
 Runtime/       # Core runtime scripts (events, listeners)
-Editor/        # Custom editors for easier workflow
-Samples~/      # Example scenes and usage scripts
+Editor/        # Custom editors for workflow improvements
+Samples~/      # Example scenes and scripts
 Tests/         # Optional automated tests
 ```
 
@@ -116,11 +100,11 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 ---
 
 ## 📄 License
-This project is licensed under the [MIT License](LICENSE.md).
+Licensed under the [MIT License](LICENSE.md).
 
 ---
 
 ## 👤 Author
-**noCTRL Studios** – Tools and SDKs for game developers.  
+**noCTRL Studios** – Tools and SDKs for game developers  
 📧 silashafeli@noctrlstudios.com  
 🌐 [https://noctrlstudios.com](https://noctrlstudios.com)
