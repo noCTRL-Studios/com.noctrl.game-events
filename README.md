@@ -18,8 +18,7 @@ Create events as assets, reference them anywhere in your project, and decouple y
 ## 📜 Crediting noCTRL Studios
 If you use this package, you must credit **noCTRL Studios** and include a link to its GitHub repository:  
 [https://github.com/noCTRL-Studios](https://github.com/noCTRL-Studios)  
-Include this in your project documentation, README, or game credits.  
-See `LICENSE.md` for full details.
+Include this in your project documentation, README, or game credits. 
 
 ---
 
