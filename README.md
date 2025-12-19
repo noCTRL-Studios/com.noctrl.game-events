@@ -35,7 +35,7 @@ Include this in your project documentation, README, or game credits.
 ### Using a Specific Version
 Append `#vX.Y.Z` to target a specific release:
 ```text
-https://github.com/noCTRL-Studios/Unity-Game-Events.git#v1.0.0
+https://github.com/noCTRL-Studios/Unity-Game-Events.git#v0.1.0
 ```
 
 ---
