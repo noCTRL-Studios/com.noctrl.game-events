@@ -122,7 +122,7 @@ m_listenerNameList = listenersNameList;
         {
             if (m_raiseMetrics.Count > 0)
             {
-                string metricsDir = Path.Combine(Application.dataPath, "com.noctrl.game-events/Editor/GameEventMetrics");
+                string metricsDir = Path.Combine(Application.dataPath, "../Library/GameEventMetrics");
                 if (!Directory.Exists(metricsDir))
                     Directory.CreateDirectory(metricsDir);
 
