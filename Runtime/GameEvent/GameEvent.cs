@@ -117,12 +117,12 @@ m_listenerNameList = listenersNameList;
     private void OnDisable()
     {
 #if UNITY_EDITOR
-        // Dump all metrics to json and out to serialization system (Assets/com.noctrl.game-events/Runtime/GameEventMetrics/<eventName>_<timestamp>.json)
+        // Dump all metrics to json and out to serialization system (Assets/com.noctrl.game-events/Editor/GameEventMetrics/<eventName>_<timestamp>.json)
         try
         {
             if (m_raiseMetrics.Count > 0)
             {
-                string metricsDir = Path.Combine(Application.dataPath, "com.noctrl.game-events/Runtime/GameEventMetrics");
+                string metricsDir = Path.Combine(Application.dataPath, "com.noctrl.game-events/Editor/GameEventMetrics");
                 if (!Directory.Exists(metricsDir))
                     Directory.CreateDirectory(metricsDir);
 
