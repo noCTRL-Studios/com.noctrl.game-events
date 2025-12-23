@@ -5,8 +5,6 @@ using UnityEngine;
 using System;
 using System.IO;
 
-
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -122,7 +120,7 @@ m_listenerNameList = listenersNameList;
         {
             if (m_raiseMetrics.Count > 0)
             {
-                string metricsDir = Path.Combine(Application.dataPath, "../Library/GameEventMetrics");
+                string metricsDir = GameEventsDefinitions.MetricsDirectory;
                 if (!Directory.Exists(metricsDir))
                     Directory.CreateDirectory(metricsDir);
 
