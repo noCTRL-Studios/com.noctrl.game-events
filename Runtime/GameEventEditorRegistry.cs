@@ -1,15 +1,12 @@
-using System.Collections.Generic;
-using UnityEditor;
+#if UNITY_EDITOR
 using UnityEngine;
+using UnityEditor;
+using System.Collections.Generic;
 
-namespace NoCtrl.GameEvents.Editor
+namespace NoCtrl.GameEvents
 {
-    // [CreateAssetMenu(fileName = "GameEventEditorRegistry", menuName = "Scriptable Objects/GameEventEditorRegistry")]
     public class GameEventEditorRegistry : ScriptableObject
     {
-        // list of all events registered in the editor
-        public List<GameEvent> registeredEvents = new List<GameEvent>();  
-
         private static GameEventEditorRegistry _instance;
 
         public static GameEventEditorRegistry Instance
@@ -17,17 +14,22 @@ namespace NoCtrl.GameEvents.Editor
             get
             {
                 if (_instance == null)
-                {
                     _instance = LoadOrCreate();
-                }
-
                 return _instance;
             }
         }
 
+        public List<GameEvent> registeredEvents = new List<GameEvent>();
+
         private static GameEventEditorRegistry LoadOrCreate()
         {
-            const string path = "Assets/Runtime/GameEventEditorRegistry.asset";
+            const string path = "Assets/Editor/GameEventEditorRegistry.asset";
+
+            // Ensure folder exists
+            string folder = System.IO.Path.GetDirectoryName(path);
+            if (!System.IO.Directory.Exists(folder))
+                System.IO.Directory.CreateDirectory(folder);
+
             var asset = AssetDatabase.LoadAssetAtPath<GameEventEditorRegistry>(path);
             if (asset == null)
             {
@@ -38,5 +40,12 @@ namespace NoCtrl.GameEvents.Editor
 
             return asset;
         }
+
+        public void Register(GameEvent evt)
+        {
+            if (!registeredEvents.Contains(evt))
+                registeredEvents.Add(evt);
+        }
     }
 }
+#endif

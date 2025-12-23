@@ -8,7 +8,7 @@ using System.IO;
 
 #if UNITY_EDITOR
 using UnityEditor;
-using NoCtrl.GameEvents.Editor;
+using NoCtrl.GameEvents;
 #endif
 
 [CreateAssetMenu]
@@ -110,7 +110,7 @@ m_listenerNameList = listenersNameList;
     private void OnEnable()
     {
 #if UNITY_EDITOR
-        GameEventEditorRegistry.Instance.registeredEvents.Add(this);
+        NoCtrl.GameEvents.GameEventEditorRegistry.Instance.Register(this);
 #endif
     }
 

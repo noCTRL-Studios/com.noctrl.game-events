@@ -1,20 +1,24 @@
 using System.IO;
 using UnityEngine;
 
-public static class GameEventsDefinitions
+namespace NoCtrl.GameEvents
 {
-    public static string MetricsDirectory
+    public static class GameEventsDefinitions
     {
-        get
+        public static string MetricsDirectory
         {
+            get
+            {
 #if UNITY_EDITOR
-            string path = Path.Combine(Application.dataPath, "../Library/GameEventMetrics");
-            return Path.GetFullPath(path);
+                string path = Path.Combine(Application.dataPath, "../Library/GameEventMetrics");
+                return Path.GetFullPath(path);
 #else
 
-            return string.Empty;
+                return string.Empty;
 
 #endif
+            }
         }
     }
 }
+        
