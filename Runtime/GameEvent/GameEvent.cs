@@ -5,8 +5,10 @@ using UnityEngine;
 using System;
 using System.IO;
 
+
 #if UNITY_EDITOR
 using UnityEditor;
+using NoCtrl.GameEvents.Editor;
 #endif
 
 [CreateAssetMenu]
@@ -108,7 +110,7 @@ m_listenerNameList = listenersNameList;
     private void OnEnable()
     {
 #if UNITY_EDITOR
-
+        GameEventEditorRegistry.Instance.registeredEvents.Add(this);
 #endif
     }
 
@@ -137,6 +139,7 @@ m_listenerNameList = listenersNameList;
 
                 // Clear the metrics for the session
                 m_raiseMetrics.Clear();
+                GameEventEditorRegistry.Instance.registeredEvents.Remove(this);
             }
         }
         catch (Exception ex)
