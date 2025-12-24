@@ -21,13 +21,13 @@ public class GameEvent : ScriptableObject
     [Serializable]
     public struct RaiseMetric
     {
-        [SerializeField] private System.DateTime m_timeStamp;
+        [SerializeField] private string m_timeStamp; // ISO 8601 format
         [SerializeField] private int m_numberListeners;
         [SerializeField] private List<string> m_listenerNameList;
 
         public RaiseMetric(List<string> listenersNameList)
         {
-            m_timeStamp = DateTime.Now;
+            m_timeStamp = System.DateTime.UtcNow.ToString("o"); // ISO 8601
             m_numberListeners = listenersNameList.Count;
 m_listenerNameList = listenersNameList;
         }
