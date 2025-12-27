@@ -99,6 +99,7 @@ m_listenerNameList = listenersNameList;
             m_listeners.Add(listener);
         }
     }
+
     public void UnregisterListener(GameEventListener listener)
     {
         if (m_listeners.Contains(listener))
@@ -139,13 +140,21 @@ m_listenerNameList = listenersNameList;
 
                 // Clear the metrics for the session
                 m_raiseMetrics.Clear();
-                GameEventEditorRegistry.Instance.registeredEvents.Remove(this);
+                GameEventEditorRegistry.Instance.m_registeredEvents.Remove(this);
             }
         }
         catch (Exception ex)
         {
             Debug.LogError($"[GameEvent] Failed to write metrics: {ex}");
         }
+
+        NoCtrl.GameEvents.GameEventEditorRegistry.Instance.Unregister(this);
 #endif
     }
+
+    public List<RaiseMetric> GetMetrics()
+    {
+        return m_raiseMetrics;
+    }
+
 }

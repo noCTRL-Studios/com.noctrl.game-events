@@ -19,6 +19,19 @@ namespace NoCtrl.GameEvents
 #endif
             }
         }
+
+        public static string GameEventEditorRegistryPath
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return "Assets/com.noctrl.game-events/Editor/GameEvent/GameEventEditorRegistry.asset";
+#else
+                return string.Empty;
+
+#endif
+            }
+        }
     }
 }
         
