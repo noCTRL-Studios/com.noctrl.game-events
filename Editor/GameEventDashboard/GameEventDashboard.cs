@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.WSA;
 
 namespace NoCtrl.GameEvents.Editor
 {
@@ -28,6 +29,8 @@ namespace NoCtrl.GameEvents.Editor
 
             m_root = m_uxml.CloneTree();
             rootVisualElement.Add(m_root);
+
+
             var clearButton = m_root.Q<Button>("ClearMetricData");
             if (clearButton == null)
             {
@@ -40,6 +43,23 @@ namespace NoCtrl.GameEvents.Editor
                 ClearMetrics();
                 Debug.Log("Game Event metrics cleared.");
             };
+
+            var OpenFolderButton = m_root.Q<Button>("OpenMetricFolder");
+
+            OpenFolderButton.clicked += () =>
+            {
+                OpenMetricsFolder();
+                Debug.Log("noCTRL Events Metric Folder Opening...");
+            };
+
+        }
+
+        public void OpenMetricsFolder()
+        {
+            // TODO: Document this fix
+            // Note this Fix for now the / needed to be added to go into the metric folder
+            var tempString = GameEventsDefinitions.MetricsDirectory + "/";
+            EditorUtility.RevealInFinder(tempString);
         }
 
         public void ClearMetrics()

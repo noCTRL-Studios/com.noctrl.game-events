@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414ae051fdcb93c4ba012e9836eb23e5, type: 3}
   m_Name: GameEventEditorRegistry
   m_EditorClassIdentifier: NoCtrl.GameEvents::NoCtrl.GameEvents.GameEventEditorRegistry
+  MetricTracking: 0
+  DebugConsoleLogging: 0
   m_registeredEvents:
-  - {fileID: 11400000, guid: 328ad18ecc1f173408e43f38bb9cb7c5, type: 2}
   - {fileID: 11400000, guid: cc564d980e6b0fd4994a4b51d2062c7a, type: 2}
+  - {fileID: 11400000, guid: 328ad18ecc1f173408e43f38bb9cb7c5, type: 2}
