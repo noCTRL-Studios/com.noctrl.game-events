@@ -7,6 +7,7 @@ using System.IO;
 
 
 #if UNITY_EDITOR
+using Codice.Client.Common;
 using UnityEditor;
 using NoCtrl.GameEvents;
 #endif
@@ -74,6 +75,7 @@ m_listenerNameList = listenersNameList;
 #if UNITY_EDITOR
 
         m_raiseMetrics.Add(new RaiseMetric(listenerList));
+        if (GameEventEditorRegistry.Instance.DebugConsoleLogging == true)
         Debug.Log("Event Metric added " + m_raiseMetrics.Count + " Metrics...");
 
 #endif
@@ -118,7 +120,14 @@ m_listenerNameList = listenersNameList;
     private void OnDisable()
     {
 #if UNITY_EDITOR
-        // Dump all metrics to json and out to serialization system (Assets/com.noctrl.game-events/Editor/GameEventMetrics/<eventName>_<timestamp>.json)
+        NoCtrl.GameEvents.GameEventEditorRegistry.Instance.Unregister(this);
+#endif
+    }
+
+    public void SerializeMetricData()
+    {
+#if UNITY_EDITOR
+        // Dump all metrics to json and out to (Assets/com.noctrl.game-events/Editor/GameEventMetrics/<eventName>_<timestamp>.json)
         try
         {
             if (m_raiseMetrics.Count > 0)
@@ -129,7 +138,7 @@ m_listenerNameList = listenersNameList;
 
                 var collection = new RaiseMetricCollection { metrics = m_raiseMetrics };
                 string json = JsonUtility.ToJson(collection, prettyPrint: true);
-                string fileName = $"{name}_{DateTime.Now:yyyyMMdd_HHmmssfff}.json";
+                string fileName = $"{name}_{DateTime.Now:yyyy-MM-ddTHH-mm-ss.fff}.json";
                 string filePath = Path.Combine(metricsDir, fileName);
 
                 File.WriteAllText(filePath, json);
@@ -139,8 +148,7 @@ m_listenerNameList = listenersNameList;
                 Debug.Log($"[GameEvent] Metrics written to: {filePath}");
 
                 // Clear the metrics for the session
-                m_raiseMetrics.Clear();
-                GameEventEditorRegistry.Instance.m_registeredEvents.Remove(this);
+                ClearMetricData();
             }
         }
         catch (Exception ex)
@@ -148,7 +156,7 @@ m_listenerNameList = listenersNameList;
             Debug.LogError($"[GameEvent] Failed to write metrics: {ex}");
         }
 
-        NoCtrl.GameEvents.GameEventEditorRegistry.Instance.Unregister(this);
+
 #endif
     }
 
@@ -157,4 +165,9 @@ m_listenerNameList = listenersNameList;
         return m_raiseMetrics;
     }
 
+    public void ClearMetricData()
+    {
+        // Clear the metrics for the session
+        m_raiseMetrics.Clear();
+    }
 }

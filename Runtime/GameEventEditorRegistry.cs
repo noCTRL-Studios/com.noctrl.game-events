@@ -6,9 +6,12 @@ using System.Collections.Generic;
 
 namespace NoCtrl.GameEvents
 {
-    [CreateAssetMenu]
+
     public class GameEventEditorRegistry : ScriptableObject
     {
+        public bool MetricTracking = true;
+        public bool DebugConsoleLogging = false;
+
         private static GameEventEditorRegistry _instance;
 
         public static GameEventEditorRegistry Instance
@@ -48,9 +51,16 @@ namespace NoCtrl.GameEvents
 
         public void EndSession()
         {
-
             CleanNullEntries();
             // sessionEndTime = DateTime.UtcNow;
+
+            foreach (GameEvent gameEvent in m_registeredEvents)
+            {
+                if (MetricTracking)
+                gameEvent.SerializeMetricData();
+
+                gameEvent.ClearMetricData();
+            }
 
         }
 
