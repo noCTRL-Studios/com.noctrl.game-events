@@ -5,6 +5,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.WSA;
 
+// System as data:
+// One folder per play session
+// One JSON per event
+// One metadata file describing the session
+
 namespace NoCtrl.GameEvents.Editor
 {
     public class GameEventDashboard : EditorWindow
