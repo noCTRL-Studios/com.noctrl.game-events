@@ -53,8 +53,9 @@ namespace NoCtrl.GameEvents.Editor
 
             OpenFolderButton.clicked += () =>
             {
-                OpenMetricsFolder();
                 Debug.Log("noCTRL Events Metric Folder Opening...");
+                EditorApplication.delayCall += OpenMetricsFolder;
+
             };
 
             var registeredEventDataList = GameEventEditorRegistry.Instance.m_registeredEvents;
@@ -104,9 +105,14 @@ namespace NoCtrl.GameEvents.Editor
 
         public void OpenMetricsFolder()
         {
+            var path = GameEventsDefinitions.MetricsDirectory; 
+            if (!Directory.Exists(path)) 
+            { 
+                Directory.CreateDirectory(path); 
+            }
             // TODO: Document this fix
             // Note this Fix for now the / needed to be added to go into the metric folder
-            var tempString = GameEventsDefinitions.MetricsDirectory + "/";
+            var tempString = path + "/";
             EditorUtility.RevealInFinder(tempString);
         }
 

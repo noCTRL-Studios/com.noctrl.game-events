@@ -15,5 +15,4 @@ MonoBehaviour:
   MetricTracking: 1
   DebugConsoleLogging: 0
   m_registeredEvents:
-  - {fileID: 0}
   - {fileID: 11400000, guid: 4ae941e907e6ebb42aed65cf74d61568, type: 2}
