@@ -63,7 +63,6 @@ namespace NoCtrl.GameEvents.Editor
             listView.itemsSource = registeredEventDataList;
             listView.makeItem = () => m_rowTemplate.Instantiate();
 
-
             listView.bindItem = (element, i) =>
             {
                 var row = registeredEventDataList[i];
@@ -74,8 +73,33 @@ namespace NoCtrl.GameEvents.Editor
             listView.fixedItemHeight = 22;
             listView.selectionType = SelectionType.Single;
 
-
             var createButton = m_root.Q<Button>("GameEventCreateButton"); createButton.clicked += ShowCreateEventPopup;
+
+            var PlaySessionDropDown = m_root.Q<DropdownField>("PlaySessionDropDown");
+            string projectName = Application.productName;
+            string metricsFolder = GameEventsDefinitions.MetricsDirectory;
+            if (!Directory.Exists(metricsFolder)) return;
+
+            string[] sessionFolders = Directory.GetDirectories(metricsFolder, $"{projectName}_Session_*");
+
+            foreach (string folder in sessionFolders)
+            {
+                PlaySessionDropDown.choices.Add(folder);
+            }
+
+            PlaySessionDropDown.RegisterValueChangedCallback(evt => 
+            {
+                // string selected = evt.newValue; Debug.Log("Selected session: " + selected);
+                var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
+                string[] sessionFiles = Directory.GetFiles(evt.newValue, $"*.json");
+
+                SessionEventDropDown.choices.Clear();
+                SessionEventDropDown.value = null;
+                foreach (string file in sessionFiles)
+                {
+                    SessionEventDropDown.choices.Add(file);
+                }
+            });
         }
 
         public void OpenMetricsFolder()
