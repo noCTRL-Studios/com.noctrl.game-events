@@ -4,8 +4,18 @@
         <ui:Button text="Clear Json Data" name="ClearMetricData" style="flex-direction: row;"/>
         <ui:Button text="Open Folder" name="OpenMetricFolder"/>
     </ui:VisualElement>
-    <ui:VisualElement style="flex-grow: 0; flex-direction: row;">
+    <ui:VisualElement name="PlaySessionElements" style="flex-grow: 0; flex-direction: row;">
         <ui:DropdownField label="Play Session" name="PlaySessionDropDown" style="flex-direction: row; flex-wrap: nowrap; width: 323px;"/>
         <ui:Button text="Load" name="PlaySessionLoadButton"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="PlaySessionView" style="flex-grow: 1;">
+        <ui:ListView name="ListView" fixed-item-height="20" style="flex-grow: 0; height: 284px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="GameEventControls" style="flex-grow: 1; flex-direction: row;">
+        <ui:Label text="Game Event Controls" style="flex-direction: column; justify-content: flex-end; align-content: auto; align-self: center; align-items: auto;"/>
+        <ui:Button text="Create New" name="GameEventCreateButton"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="GameEventView" style="flex-grow: 1;">
+        <ui:ListView name="GameEventListView" fixed-item-height="10" data-source="project://database/Assets/com.noctrl.game-events/Editor/GameEvent/GameEventEditorRegistry.asset?fileID=11400000&amp;guid=525437d050f394541993627ac6a924b4&amp;type=2#GameEventEditorRegistry" data-source-path="" virtualization-method="DynamicHeight" selection-type="None" show-border="false"/>
     </ui:VisualElement>
 </ui:UXML>

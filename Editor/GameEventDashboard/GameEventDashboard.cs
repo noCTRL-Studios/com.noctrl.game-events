@@ -1,9 +1,7 @@
 using System.IO;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.WSA;
 
 // System as data:
 // One folder per play session
@@ -15,6 +13,8 @@ namespace NoCtrl.GameEvents.Editor
     public class GameEventDashboard : EditorWindow
     {
         [SerializeField] private VisualTreeAsset m_uxml;
+        [SerializeField] private VisualTreeAsset m_rowTemplate;
+
         private TemplateContainer m_root;
 
         // Menu window
@@ -34,7 +34,6 @@ namespace NoCtrl.GameEvents.Editor
 
             m_root = m_uxml.CloneTree();
             rootVisualElement.Add(m_root);
-
 
             var clearButton = m_root.Q<Button>("ClearMetricData");
             if (clearButton == null)
@@ -57,6 +56,22 @@ namespace NoCtrl.GameEvents.Editor
                 Debug.Log("noCTRL Events Metric Folder Opening...");
             };
 
+            var registeredEventDataList = GameEventEditorRegistry.Instance.m_registeredEvents;
+            var listView = m_root.Q<ListView>("GameEventListView");
+
+            listView.itemsSource = registeredEventDataList;
+            listView.makeItem = () => m_rowTemplate.Instantiate();
+
+
+            listView.bindItem = (element, i) =>
+            {
+                var row = registeredEventDataList[i];
+                element.Q<Label>("eventName").text = row.name;
+                element.Q<Label>("listenerCount").text = row.Listeners.Count.ToString();
+            };
+
+            listView.fixedItemHeight = 22;
+            listView.selectionType = SelectionType.Single;
         }
 
         public void OpenMetricsFolder()
@@ -71,8 +86,14 @@ namespace NoCtrl.GameEvents.Editor
         {
             string metricsFolder = GameEventsDefinitions.MetricsDirectory;
             if (!Directory.Exists(metricsFolder)) return;
-            string[] jsonFiles = Directory.GetFiles(metricsFolder, "*.json");
-            foreach (string file in jsonFiles) File.Delete(file);
+
+            // Find all session folders for this project
+            string projectName = Application.productName;
+            string[] sessionFolders= Directory.GetDirectories(metricsFolder, $"{projectName}_Session_*");
+
+            foreach (string folder in sessionFolders) 
+                Directory.Delete(folder, true); // true = recursive delete
+
             AssetDatabase.Refresh();
             EditorUtility.SetDirty(this);
         }

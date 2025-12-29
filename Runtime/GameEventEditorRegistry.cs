@@ -25,6 +25,8 @@ namespace NoCtrl.GameEvents
         }
 
         public List<GameEvent> m_registeredEvents = new List<GameEvent>();
+        private DateTime sessionStartTime;
+        private DateTime sessionEndTime;
 
         public void Register(GameEvent gameEvent)
         {
@@ -45,19 +47,22 @@ namespace NoCtrl.GameEvents
         public void BeginSession()
         {
             CleanNullEntries();
-            // sessionStartTime = DateTime.UtcNow;
+            sessionStartTime = DateTime.UtcNow;
 
         }
 
         public void EndSession()
         {
             CleanNullEntries();
-            // sessionEndTime = DateTime.UtcNow;
+
+            string projectName = Application.productName;
+            string sessionId = sessionStartTime.ToString("yyyy-MM-dd_HH-mm-ss");
+            string folderName = $"{projectName}_Session_{sessionId}";
 
             foreach (GameEvent gameEvent in m_registeredEvents)
             {
                 if (MetricTracking)
-                gameEvent.SerializeMetricData();
+                gameEvent.SerializeMetricData(folderName);
 
                 gameEvent.ClearMetricData();
             }

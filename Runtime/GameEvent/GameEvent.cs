@@ -124,7 +124,7 @@ m_listenerNameList = listenersNameList;
 #endif
     }
 
-    public void SerializeMetricData()
+    public void SerializeMetricData(string sessionFolder)
     {
 #if UNITY_EDITOR
         // Dump all metrics to json and out to (Assets/com.noctrl.game-events/Editor/GameEventMetrics/<eventName>_<timestamp>.json)
@@ -132,13 +132,13 @@ m_listenerNameList = listenersNameList;
         {
             if (m_raiseMetrics.Count > 0)
             {
-                string metricsDir = GameEventsDefinitions.MetricsDirectory;
+                string metricsDir = GameEventsDefinitions.MetricsDirectory + "/" +sessionFolder;
                 if (!Directory.Exists(metricsDir))
                     Directory.CreateDirectory(metricsDir);
 
                 var collection = new RaiseMetricCollection { metrics = m_raiseMetrics };
                 string json = JsonUtility.ToJson(collection, prettyPrint: true);
-                string fileName = $"{name}_{DateTime.Now:yyyy-MM-ddTHH-mm-ss.fff}.json";
+                string fileName = $"{name}_{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ss.fff}.json";
                 string filePath = Path.Combine(metricsDir, fileName);
 
                 File.WriteAllText(filePath, json);
