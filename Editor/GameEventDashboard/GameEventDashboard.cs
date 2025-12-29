@@ -1,5 +1,6 @@
 using System.IO;
 using UnityEditor;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -72,6 +73,9 @@ namespace NoCtrl.GameEvents.Editor
 
             listView.fixedItemHeight = 22;
             listView.selectionType = SelectionType.Single;
+
+
+            var createButton = m_root.Q<Button>("GameEventCreateButton"); createButton.clicked += ShowCreateEventPopup;
         }
 
         public void OpenMetricsFolder()
@@ -96,6 +100,23 @@ namespace NoCtrl.GameEvents.Editor
 
             AssetDatabase.Refresh();
             EditorUtility.SetDirty(this);
+        }
+
+        private void ShowCreateEventPopup()
+        {
+            string path = EditorUtility.SaveFilePanelInProject("Create Game Event", "NewGameEvent", "asset",
+                "Choose where to save the new GameEvent asset.");
+
+            if (string.IsNullOrEmpty(path)) return;
+
+            var asset = AssetDatabase.LoadAssetAtPath<GameEvent>(path);
+            asset = CreateInstance<GameEvent>();
+
+            // Create the event
+            AssetDatabase.CreateAsset(asset, path);
+            AssetDatabase.SaveAssets(); // Save to data
+            EditorGUIUtility.PingObject(asset); // ping project view
+            Selection.activeObject = asset; // set active
         }
     }
 }

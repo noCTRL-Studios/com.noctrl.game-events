@@ -13,7 +13,7 @@
     </ui:VisualElement>
     <ui:VisualElement name="GameEventControls" style="flex-grow: 1; flex-direction: row;">
         <ui:Label text="Game Event Controls" style="flex-direction: column; justify-content: flex-end; align-content: auto; align-self: center; align-items: auto;"/>
-        <ui:Button text="Create New" name="GameEventCreateButton"/>
+        <ui:Button text="Create New Event" name="GameEventCreateButton"/>
     </ui:VisualElement>
     <ui:VisualElement name="GameEventView" style="flex-grow: 1;">
         <ui:ListView name="GameEventListView" fixed-item-height="10" data-source="project://database/Assets/com.noctrl.game-events/Editor/GameEvent/GameEventEditorRegistry.asset?fileID=11400000&amp;guid=525437d050f394541993627ac6a924b4&amp;type=2#GameEventEditorRegistry" data-source-path="" virtualization-method="DynamicHeight" selection-type="None" show-border="false"/>

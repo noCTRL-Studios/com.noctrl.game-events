@@ -8,9 +8,6 @@
 <VisualElement xmlns="UnityEngine.UIElements">
     <VisualElement style="flex-direction: row; padding: 4px; gap: 8px;">
         
-        <!-- Column label -->
-        <Label name="eventNameLabel" text="Event" style="width: 80px;" />
-
         <!-- Event name -->
         <Label name="eventName" text="Event Name"
                style="flex-grow: 1; min-width: 120px;" />
