@@ -6,11 +6,9 @@
     </ui:VisualElement>
     <ui:VisualElement name="PlaySessionElements" style="flex-grow: 0; flex-direction: row;">
         <ui:DropdownField label="Play Session" name="PlaySessionDropDown" style="flex-direction: row; flex-wrap: nowrap; width: 323px;"/>
-        <ui:Button text="Load" name="PlaySessionLoadButton"/>
     </ui:VisualElement>
     <ui:VisualElement name="SessonEventElements" style="flex-grow: 1; flex-direction: row;">
         <ui:DropdownField label="Session Event" name="SessionEventDropDown" style="width: 323px;"/>
-        <ui:Button text="Load"/>
     </ui:VisualElement>
     <ui:VisualElement name="PlaySessionView" style="flex-grow: 1;">
         <ui:ListView name="ListView" fixed-item-height="20" style="flex-grow: 0; height: 284px;"/>
