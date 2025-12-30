@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEditor.VersionControl;
@@ -17,6 +18,9 @@ namespace NoCtrl.GameEvents.Editor
         [SerializeField] private VisualTreeAsset m_rowTemplate;
 
         private TemplateContainer m_root;
+
+        private Dictionary<string, PlaySessionInfo> m_playSessionInfos = new Dictionary<string, PlaySessionInfo>();
+        private Dictionary<string, EventMetricInfo> m_eventMetricInfos = new Dictionary<string, EventMetricInfo>();
 
         // Menu window
         [MenuItem("noCTRL Studios/Game Events Dashboard %#d")]
@@ -85,22 +89,40 @@ namespace NoCtrl.GameEvents.Editor
 
             foreach (string folder in sessionFolders)
             {
-                PlaySessionDropDown.choices.Add(folder);
+                var tempPlaySession = new PlaySessionInfo(folder);
+
+                if (!m_playSessionInfos.ContainsKey(tempPlaySession.FolderName))
+                {
+                    m_playSessionInfos.Add(tempPlaySession.FolderName, tempPlaySession);
+                }
+
+                PlaySessionDropDown.choices.Add(tempPlaySession.FolderName);
             }
 
-            PlaySessionDropDown.RegisterValueChangedCallback(evt => 
+            PlaySessionDropDown.RegisterValueChangedCallback(evt =>
             {
-                // string selected = evt.newValue; Debug.Log("Selected session: " + selected);
                 var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
-                string[] sessionFiles = Directory.GetFiles(evt.newValue, $"*.json");
+
+                // Look up the full session info using the display name
+                PlaySessionInfo sessionInfo = m_playSessionInfos[evt.newValue];
+
+                // Use the FULL PATH for file loading
+                string[] sessionFiles = Directory.GetFiles(sessionInfo.FullPath, "*.json");
 
                 SessionEventDropDown.choices.Clear();
                 SessionEventDropDown.value = null;
+
                 foreach (string file in sessionFiles)
                 {
-                    SessionEventDropDown.choices.Add(file);
+                    var tempEventMetricInfo = new EventMetricInfo(file);
+
+                    if (!m_eventMetricInfos.ContainsKey(tempEventMetricInfo.FileName))
+                        m_eventMetricInfos.Add(tempEventMetricInfo.FileName, tempEventMetricInfo);
+
+                    SessionEventDropDown.choices.Add(tempEventMetricInfo.FileName);
                 }
             });
+
         }
 
         public void OpenMetricsFolder()
