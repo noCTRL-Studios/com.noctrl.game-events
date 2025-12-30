@@ -101,6 +101,9 @@ namespace NoCtrl.GameEvents.Editor
 
             PlaySessionDropDown.RegisterValueChangedCallback(evt =>
             {
+                if (string.IsNullOrEmpty(evt.newValue))
+                    return; // Ignore null/empty selections
+
                 var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
 
                 // Look up the full session info using the display name
@@ -123,6 +126,18 @@ namespace NoCtrl.GameEvents.Editor
                 }
             });
 
+            var ResetButton = m_root.Q<Button>("ResetButton");
+            ResetButton.clicked += Reset;
+
+        }
+
+        public void Reset()
+        {
+            var PlaySessionDropDown = m_root.Q<DropdownField>("PlaySessionDropDown");
+            var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
+
+            SessionEventDropDown.value = null;
+            PlaySessionDropDown.value = null;
         }
 
         public void OpenMetricsFolder()
@@ -149,6 +164,17 @@ namespace NoCtrl.GameEvents.Editor
 
             foreach (string folder in sessionFolders) 
                 Directory.Delete(folder, true); // true = recursive delete
+
+m_playSessionInfos.Clear();
+m_eventMetricInfos.Clear();
+
+var PlaySessionDropDown = m_root.Q<DropdownField>("PlaySessionDropDown");
+var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
+
+SessionEventDropDown.value = null;
+SessionEventDropDown.choices.Clear();
+            PlaySessionDropDown.value = null;
+            PlaySessionDropDown.choices.Clear();
 
             AssetDatabase.Refresh();
             EditorUtility.SetDirty(this);
