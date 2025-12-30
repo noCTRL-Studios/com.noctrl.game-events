@@ -133,6 +133,9 @@ namespace NoCtrl.GameEvents.Editor
 
         public void Reset()
         {
+            if (m_root == null) 
+                return;
+
             var PlaySessionDropDown = m_root.Q<DropdownField>("PlaySessionDropDown");
             var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
 
