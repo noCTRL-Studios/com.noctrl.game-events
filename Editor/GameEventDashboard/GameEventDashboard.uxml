@@ -12,7 +12,7 @@
         <ui:DropdownField label="Session Event" name="SessionEventDropDown" style="width: 323px;"/>
     </ui:VisualElement>
     <ui:VisualElement name="PlaySessionView" style="flex-grow: 1;">
-        <ui:ListView name="ListView" fixed-item-height="20" style="flex-grow: 0; height: 284px;"/>
+        <ui:MultiColumnListView columns="" sort-column-descriptions="" fixed-item-height="20" name="PlaySessionListView" style="height: 235px; width: 486px;"/>
     </ui:VisualElement>
     <ui:VisualElement name="GameEventControls" style="flex-grow: 1; flex-direction: row;">
         <ui:Label text="Game Event Controls" style="flex-direction: column; justify-content: flex-end; align-content: auto; align-self: center; align-items: auto;"/>
