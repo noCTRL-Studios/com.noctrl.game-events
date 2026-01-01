@@ -81,6 +81,8 @@ namespace NoCtrl.GameEvents.Editor
             var createButton = m_root.Q<Button>("GameEventCreateButton"); createButton.clicked += ShowCreateEventPopup;
 
             var PlaySessionDropDown = m_root.Q<DropdownField>("PlaySessionDropDown");
+            var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
+
             string projectName = Application.productName;
             string metricsFolder = GameEventsDefinitions.MetricsDirectory;
             if (!Directory.Exists(metricsFolder)) return;
@@ -125,6 +127,17 @@ namespace NoCtrl.GameEvents.Editor
                     SessionEventDropDown.choices.Add(tempEventMetricInfo.FileName);
                 }
             });
+
+            SessionEventDropDown.RegisterValueChangedCallback(evt =>
+            {
+                if (string.IsNullOrEmpty(evt.newValue))
+                    return;
+
+// TODO: finish reading Json data when this value changes and display in the playSessionListView
+
+            });
+
+            var PlaySessionListView = m_root.Q<MultiColumnListView>("PlaySessionListView");
 
             var ResetButton = m_root.Q<Button>("ResetButton");
             ResetButton.clicked += Reset;

@@ -46,7 +46,7 @@ m_listenerNameList = listenersNameList;
     
     // Container so JsonUtility can serialize a list of metrics
     [Serializable]
-    private class RaiseMetricCollection
+    public class RaiseMetricCollection
     {
         public List<RaiseMetric> metrics;
     }
