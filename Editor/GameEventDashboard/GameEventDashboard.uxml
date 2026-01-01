@@ -12,13 +12,18 @@
         <ui:DropdownField label="Session Event" name="SessionEventDropDown" style="width: 323px;"/>
     </ui:VisualElement>
     <ui:VisualElement name="PlaySessionView" style="flex-grow: 1;">
-        <ui:MultiColumnListView columns="" sort-column-descriptions="" fixed-item-height="20" name="PlaySessionListView" style="height: 235px; width: 486px;"/>
+        <ui:MultiColumnListView columns="" sort-column-descriptions="" fixed-item-height="20" name="PlaySessionListView" show-alternating-row-backgrounds="All" style="height: 235px; width: 486px;">
+            <ui:Columns>
+                <ui:Column name="TimeStamp" title="Time Stamp" width="auto" stretchable="true" visible="true"/>
+                <ui:Column name="NumberListeners" title="Number Of Listeners" stretchable="true" width="auto"/>
+            </ui:Columns>
+        </ui:MultiColumnListView>
     </ui:VisualElement>
     <ui:VisualElement name="GameEventControls" style="flex-grow: 1; flex-direction: row;">
         <ui:Label text="Game Event Controls" style="flex-direction: column; justify-content: flex-end; align-content: auto; align-self: center; align-items: auto;"/>
         <ui:Button text="Create New Event" name="GameEventCreateButton"/>
     </ui:VisualElement>
     <ui:VisualElement name="GameEventView" style="flex-grow: 1;">
-        <ui:ListView name="GameEventListView" fixed-item-height="10" data-source="project://database/Assets/com.noctrl.game-events/Editor/GameEvent/GameEventEditorRegistry.asset?fileID=11400000&amp;guid=525437d050f394541993627ac6a924b4&amp;type=2#GameEventEditorRegistry" data-source-path="" virtualization-method="DynamicHeight" selection-type="None" show-border="false"/>
+        <ui:ListView name="GameEventListView" fixed-item-height="10" data-source="project://database/Assets/com.noctrl.game-events/Editor/GameEvent/GameEventEditorRegistry.asset?fileID=11400000&amp;guid=525437d050f394541993627ac6a924b4&amp;type=2#GameEventEditorRegistry" data-source-path="" virtualization-method="FixedHeight" selection-type="None" show-border="false"/>
     </ui:VisualElement>
 </ui:UXML>
