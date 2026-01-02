@@ -26,6 +26,16 @@ public class GameEvent : ScriptableObject
         [SerializeField] private int m_numberListeners;
         [SerializeField] private List<string> m_listenerNameList;
 
+        public int ListenerCount()
+        {
+            return m_numberListeners;
+        }
+
+        public string TimeStamp()
+        {
+            return m_timeStamp;
+        }
+
         public RaiseMetric(List<string> listenersNameList)
         {
             m_timeStamp = System.DateTime.UtcNow.ToString("o"); // ISO 8601

@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -18,6 +19,8 @@ namespace NoCtrl.GameEvents.Editor
         [SerializeField] private VisualTreeAsset m_rowTemplate;
 
         private TemplateContainer m_root;
+
+        private List<EventMetricRow> m_rows = new List<EventMetricRow>();
 
         private Dictionary<string, PlaySessionInfo> m_playSessionInfos = new Dictionary<string, PlaySessionInfo>();
         private Dictionary<string, EventMetricInfo> m_eventMetricInfos = new Dictionary<string, EventMetricInfo>();
@@ -133,11 +136,39 @@ namespace NoCtrl.GameEvents.Editor
                 if (string.IsNullOrEmpty(evt.newValue))
                     return;
 
-// TODO: finish reading Json data when this value changes and display in the playSessionListView
+                // TODO: finish reading Json data when this value changes and display in the playSessionListView
 
+                if (!m_eventMetricInfos.ContainsKey(evt.newValue))
+                    return;
+
+                List<GameEvent.RaiseMetric> eventMetrics = m_eventMetricInfos[evt.newValue].GetMetrics();
+
+m_rows.Clear();
+foreach (GameEvent.RaiseMetric metric in eventMetrics)
+{
+    m_rows.Add(new EventMetricRow
+    {
+        TimeStamp = metric.TimeStamp(),
+        UniqueListeners = metric.ListenerCount()
+    });
+                }
+
+                var PlaySessionListView = m_root.Q<MultiColumnListView>("PlaySessionListView");
+
+                PlaySessionListView.columns["TimeStamp"].bindCell = (element, rowIndex) =>
+                {
+                    var row = m_rows[rowIndex]; (element as Label).text = row.TimeStamp;
+                }; 
+
+                PlaySessionListView.columns["NumberListeners"].bindCell = (element, rowIndex) =>
+                {
+                    var row = m_rows[rowIndex]; (element as Label).text = row.UniqueListeners.ToString();
+                };
+                PlaySessionListView.itemsSource = m_rows;
+                PlaySessionListView.Rebuild();
             });
 
-            var PlaySessionListView = m_root.Q<MultiColumnListView>("PlaySessionListView");
+            
 
             var ResetButton = m_root.Q<Button>("ResetButton");
             ResetButton.clicked += Reset;
@@ -154,6 +185,9 @@ namespace NoCtrl.GameEvents.Editor
 
             SessionEventDropDown.value = null;
             PlaySessionDropDown.value = null;
+            m_rows.Clear();
+            var PlaySessionListView = m_root.Q<MultiColumnListView>("PlaySessionListView");
+            PlaySessionListView.Rebuild();
         }
 
         public void OpenMetricsFolder()
