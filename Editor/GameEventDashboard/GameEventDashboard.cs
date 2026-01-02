@@ -16,7 +16,6 @@ namespace NoCtrl.GameEvents.Editor
     public class GameEventDashboard : EditorWindow
     {
         [SerializeField] private VisualTreeAsset m_uxml;
-        [SerializeField] private VisualTreeAsset m_rowTemplate;
 
         private TemplateContainer m_root;
 
