@@ -20,7 +20,8 @@ namespace NoCtrl.GameEvents.Editor
 
         private TemplateContainer m_root;
 
-        private List<EventMetricRow> m_rows = new List<EventMetricRow>();
+        private List<EventMetricRow> m_eventMetricRowRows = new List<EventMetricRow>();
+        private List<ActiveEventRow> m_activeEventRowRows = new List<ActiveEventRow>();
 
         private Dictionary<string, PlaySessionInfo> m_playSessionInfos = new Dictionary<string, PlaySessionInfo>();
         private Dictionary<string, EventMetricInfo> m_eventMetricInfos = new Dictionary<string, EventMetricInfo>();
@@ -66,20 +67,32 @@ namespace NoCtrl.GameEvents.Editor
             };
 
             var registeredEventDataList = GameEventEditorRegistry.Instance.m_registeredEvents;
-            var listView = m_root.Q<ListView>("GameEventListView");
+            var listView = m_root.Q<MultiColumnListView>("GameEventListView");
 
-            listView.itemsSource = registeredEventDataList;
-            listView.makeItem = () => m_rowTemplate.Instantiate();
-
-            listView.bindItem = (element, i) =>
+            // Convert JSON metrics into ListView rows
+            m_activeEventRowRows.Clear();
+            foreach (var gameEvent in registeredEventDataList)
             {
-                var row = registeredEventDataList[i];
-                element.Q<Label>("eventName").text = row.name;
-                element.Q<Label>("listenerCount").text = row.Listeners.Count.ToString();
+                m_activeEventRowRows.Add(new ActiveEventRow
+                {
+                    EventName = gameEvent.name,
+                    UniqueListeners = gameEvent.Listeners.Count
+                });
+            }
+
+            listView.columns["EventName"].bindCell = (element, rowIndex) =>
+            {
+                var row = m_activeEventRowRows[rowIndex]; (element as Label).text = row.EventName;
             };
 
-            listView.fixedItemHeight = 22;
-            listView.selectionType = SelectionType.Single;
+            listView.columns["NumberOfListeners"].bindCell = (element, rowIndex) =>
+            {
+                var row = m_activeEventRowRows[rowIndex]; (element as Label).text = row.UniqueListeners.ToString();
+            };
+
+            // Assign data + refresh
+            listView.itemsSource = m_activeEventRowRows;
+            listView.Rebuild();
 
             var createButton = m_root.Q<Button>("GameEventCreateButton"); createButton.clicked += ShowCreateEventPopup;
 
@@ -143,10 +156,10 @@ namespace NoCtrl.GameEvents.Editor
 
                 List<GameEvent.RaiseMetric> eventMetrics = m_eventMetricInfos[evt.newValue].GetMetrics();
 
-m_rows.Clear();
+m_eventMetricRowRows.Clear();
 foreach (GameEvent.RaiseMetric metric in eventMetrics)
 {
-    m_rows.Add(new EventMetricRow
+    m_eventMetricRowRows.Add(new EventMetricRow
     {
         TimeStamp = metric.TimeStamp(),
         UniqueListeners = metric.ListenerCount()
@@ -157,14 +170,14 @@ foreach (GameEvent.RaiseMetric metric in eventMetrics)
 
                 PlaySessionListView.columns["TimeStamp"].bindCell = (element, rowIndex) =>
                 {
-                    var row = m_rows[rowIndex]; (element as Label).text = row.TimeStamp;
+                    var row = m_eventMetricRowRows[rowIndex]; (element as Label).text = row.TimeStamp;
                 }; 
 
                 PlaySessionListView.columns["NumberListeners"].bindCell = (element, rowIndex) =>
                 {
-                    var row = m_rows[rowIndex]; (element as Label).text = row.UniqueListeners.ToString();
+                    var row = m_eventMetricRowRows[rowIndex]; (element as Label).text = row.UniqueListeners.ToString();
                 };
-                PlaySessionListView.itemsSource = m_rows;
+                PlaySessionListView.itemsSource = m_eventMetricRowRows;
                 PlaySessionListView.Rebuild();
             });
 
@@ -185,7 +198,7 @@ foreach (GameEvent.RaiseMetric metric in eventMetrics)
 
             SessionEventDropDown.value = null;
             PlaySessionDropDown.value = null;
-            m_rows.Clear();
+            m_eventMetricRowRows.Clear();
             var PlaySessionListView = m_root.Q<MultiColumnListView>("PlaySessionListView");
             PlaySessionListView.Rebuild();
         }

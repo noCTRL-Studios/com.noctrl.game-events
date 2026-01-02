@@ -6,6 +6,12 @@ using UnityEngine;
 
 namespace NoCtrl.GameEvents.Editor
 {
+    public class ActiveEventRow
+    {
+        public string EventName;
+        public int UniqueListeners;
+    }
+
     public class EventMetricRow
     {
         public string TimeStamp;
