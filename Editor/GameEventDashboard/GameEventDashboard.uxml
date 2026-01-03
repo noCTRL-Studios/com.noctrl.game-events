@@ -18,8 +18,8 @@
         <ui:Button text="Reset" triple-click-selects-line="false" name="ResetButton"/>
     </ui:VisualElement>
     <ui:VisualElement name="PlaySessionView" style="flex-grow: 1; padding-top: 1px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
-        <ui:MultiColumnListView columns="" sort-column-descriptions="" fixed-item-height="20" name="PlaySessionListView" show-alternating-row-backgrounds="All" reorder-mode="Simple" style="height: 235px; width: 486px;">
-            <ui:Columns>
+        <ui:MultiColumnListView columns="" sort-column-descriptions="" fixed-item-height="20" name="PlaySessionListView" show-alternating-row-backgrounds="All" reorder-mode="Simple" style="min-height: 200px; max-height: 500px;">
+            <ui:Columns stretch-mode="GrowAndFill">
                 <ui:Column name="TimeStamp" title="Time Stamp" width="auto" stretchable="true" visible="true"/>
                 <ui:Column name="NumberListeners" title="Number Of Listeners" stretchable="true" width="auto"/>
             </ui:Columns>
