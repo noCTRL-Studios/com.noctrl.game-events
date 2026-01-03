@@ -25,6 +25,10 @@ namespace NoCtrl.GameEvents.Editor
         private Dictionary<string, PlaySessionInfo> m_playSessionInfos = new Dictionary<string, PlaySessionInfo>();
         private Dictionary<string, EventMetricInfo> m_eventMetricInfos = new Dictionary<string, EventMetricInfo>();
 
+        private MultiColumnListView m_gameEventMultiColumnListView;
+        private MultiColumnListView m_playSessionListView;
+        private DropdownField m_playSessionDropDown;
+        private DropdownField m_sessionEventDropDown;
         // Menu window
         [MenuItem("noCTRL Studios/Game Events Dashboard %#d")]
         public static void ShowWindow()
@@ -45,127 +49,11 @@ namespace NoCtrl.GameEvents.Editor
 
             Build_ClearButton();
             Build_OpenFolderButton();
-
-            var registeredEventDataList = GameEventEditorRegistry.Instance.m_registeredEvents;
-            var GameEventListView = m_root.Q<MultiColumnListView>("GameEventListView");
-
-            // Convert JSON metrics into ListView rows
-            m_activeEventRowRows.Clear();
-            foreach (var gameEvent in registeredEventDataList)
-            {
-                m_activeEventRowRows.Add(new ActiveEventRow
-                {
-                    EventName = gameEvent.name,
-                    UniqueListeners = gameEvent.Listeners.Count
-                });
-            }
-
-            GameEventListView.columns["EventName"].bindCell = (element, rowIndex) =>
-            {
-                var row = m_activeEventRowRows[rowIndex]; (element as Label).text = row.EventName;
-            };
-
-            GameEventListView.columns["NumberOfListeners"].bindCell = (element, rowIndex) =>
-            {
-                var row = m_activeEventRowRows[rowIndex]; (element as Label).text = row.UniqueListeners.ToString();
-            };
-
-            // Assign data + refresh
-            GameEventListView.itemsSource = m_activeEventRowRows;
-            GameEventListView.Rebuild();
-
-            var createButton = m_root.Q<Button>("GameEventCreateButton"); createButton.clicked += ShowCreateEventPopup;
-
-            var PlaySessionDropDown = m_root.Q<DropdownField>("PlaySessionDropDown");
-            var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
-
-            string projectName = Application.productName;
-            string metricsFolder = GameEventsDefinitions.MetricsDirectory;
-            if (!Directory.Exists(metricsFolder)) return;
-
-            string[] sessionFolders = Directory.GetDirectories(metricsFolder, $"{projectName}_Session_*");
-
-            foreach (string folder in sessionFolders)
-            {
-                var tempPlaySession = new PlaySessionInfo(folder);
-
-                if (!m_playSessionInfos.ContainsKey(tempPlaySession.FolderName))
-                {
-                    m_playSessionInfos.Add(tempPlaySession.FolderName, tempPlaySession);
-                }
-
-                PlaySessionDropDown.choices.Add(tempPlaySession.FolderName);
-            }
-
-            PlaySessionDropDown.RegisterValueChangedCallback(evt =>
-            {
-                if (string.IsNullOrEmpty(evt.newValue))
-                    return; // Ignore null/empty selections
-
-                var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
-
-                // Look up the full session info using the display name
-                PlaySessionInfo sessionInfo = m_playSessionInfos[evt.newValue];
-
-                // Use the FULL PATH for file loading
-                string[] sessionFiles = Directory.GetFiles(sessionInfo.FullPath, "*.json");
-
-                SessionEventDropDown.choices.Clear();
-                SessionEventDropDown.value = null;
-
-                foreach (string file in sessionFiles)
-                {
-                    var tempEventMetricInfo = new EventMetricInfo(file);
-
-                    if (!m_eventMetricInfos.ContainsKey(tempEventMetricInfo.FileName))
-                        m_eventMetricInfos.Add(tempEventMetricInfo.FileName, tempEventMetricInfo);
-
-                    SessionEventDropDown.choices.Add(tempEventMetricInfo.FileName);
-                }
-            });
-
-            SessionEventDropDown.RegisterValueChangedCallback(evt =>
-            {
-                if (string.IsNullOrEmpty(evt.newValue))
-                    return;
-
-                // TODO: finish reading Json data when this value changes and display in the playSessionListView
-
-                if (!m_eventMetricInfos.ContainsKey(evt.newValue))
-                    return;
-
-                List<GameEvent.RaiseMetric> eventMetrics = m_eventMetricInfos[evt.newValue].GetMetrics();
-
-m_eventMetricRowRows.Clear();
-foreach (GameEvent.RaiseMetric metric in eventMetrics)
-{
-    m_eventMetricRowRows.Add(new EventMetricRow
-    {
-        TimeStamp = metric.TimeStamp(),
-        UniqueListeners = metric.ListenerCount()
-    });
-                }
-
-                var PlaySessionListView = m_root.Q<MultiColumnListView>("PlaySessionListView");
-
-                PlaySessionListView.columns["TimeStamp"].bindCell = (element, rowIndex) =>
-                {
-                    var row = m_eventMetricRowRows[rowIndex]; (element as Label).text = row.TimeStamp;
-                }; 
-
-                PlaySessionListView.columns["NumberListeners"].bindCell = (element, rowIndex) =>
-                {
-                    var row = m_eventMetricRowRows[rowIndex]; (element as Label).text = row.UniqueListeners.ToString();
-                };
-                PlaySessionListView.itemsSource = m_eventMetricRowRows;
-                PlaySessionListView.Rebuild();
-            });
-
-            
-
-            var ResetButton = m_root.Q<Button>("ResetButton");
-            ResetButton.clicked += Reset;
-
+Build_CreateGameEventButton();
+Build_GameEventMultiColumnListView();
+Build_PlaySessionDropDown();
+Build_SessionEventDropDown();
+Build_ResetButton();
         }
 
         public void Reset()
@@ -265,6 +153,142 @@ SessionEventDropDown.choices.Clear();
                 EditorApplication.delayCall += OpenMetricsFolder;
 
             };
+        }
+
+        private void Build_CreateGameEventButton()
+        {
+            var createButton = m_root.Q<Button>("GameEventCreateButton"); 
+            createButton.clicked += ShowCreateEventPopup;
+        }
+
+        private void Build_GameEventMultiColumnListView()
+        {
+            var registeredEventDataList = GameEventEditorRegistry.Instance.m_registeredEvents;
+            m_gameEventMultiColumnListView = m_root.Q<MultiColumnListView>("GameEventListView");
+
+            // Convert JSON metrics into ListView rows
+            m_activeEventRowRows.Clear();
+            foreach (var gameEvent in registeredEventDataList)
+            {
+                m_activeEventRowRows.Add(new ActiveEventRow
+                {
+                    EventName = gameEvent.name,
+                    UniqueListeners = gameEvent.Listeners.Count
+                });
+            }
+
+            m_gameEventMultiColumnListView.columns["EventName"].bindCell = (element, rowIndex) =>
+            {
+                var row = m_activeEventRowRows[rowIndex]; (element as Label).text = row.EventName;
+            };
+
+            m_gameEventMultiColumnListView.columns["NumberOfListeners"].bindCell = (element, rowIndex) =>
+            {
+                var row = m_activeEventRowRows[rowIndex]; (element as Label).text = row.UniqueListeners.ToString();
+            };
+
+            // Assign data + refresh
+            m_gameEventMultiColumnListView.itemsSource = m_activeEventRowRows;
+            m_gameEventMultiColumnListView.Rebuild();
+        }
+
+        private void Build_PlaySessionDropDown()
+        {
+m_playSessionDropDown             = m_root.Q<DropdownField>("PlaySessionDropDown");
+
+            string projectName = Application.productName;
+            string metricsFolder = GameEventsDefinitions.MetricsDirectory;
+
+            if (!Directory.Exists(metricsFolder)) return;
+
+            string[] sessionFolders = Directory.GetDirectories(metricsFolder, $"{projectName}_Session_*");
+
+            foreach (string folder in sessionFolders)
+            {
+                var tempPlaySession = new PlaySessionInfo(folder);
+
+                if (!m_playSessionInfos.ContainsKey(tempPlaySession.FolderName))
+                {
+                    m_playSessionInfos.Add(tempPlaySession.FolderName, tempPlaySession);
+                }
+
+                m_playSessionDropDown.choices.Add(tempPlaySession.FolderName);
+            }
+
+            m_playSessionDropDown.RegisterValueChangedCallback(evt =>
+            {
+                if (string.IsNullOrEmpty(evt.newValue))
+                    return; // Ignore null/empty selections
+
+                var SessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
+
+                // Look up the full session info using the display name
+                PlaySessionInfo sessionInfo = m_playSessionInfos[evt.newValue];
+
+                // Use the FULL PATH for file loading
+                string[] sessionFiles = Directory.GetFiles(sessionInfo.FullPath, "*.json");
+
+                SessionEventDropDown.choices.Clear();
+                SessionEventDropDown.value = null;
+
+                foreach (string file in sessionFiles)
+                {
+                    var tempEventMetricInfo = new EventMetricInfo(file);
+
+                    if (!m_eventMetricInfos.ContainsKey(tempEventMetricInfo.FileName))
+                        m_eventMetricInfos.Add(tempEventMetricInfo.FileName, tempEventMetricInfo);
+
+                    SessionEventDropDown.choices.Add(tempEventMetricInfo.FileName);
+                }
+            });
+        }
+
+        private void Build_SessionEventDropDown()
+        {
+            m_sessionEventDropDown = m_root.Q<DropdownField>("SessionEventDropDown");
+
+            m_sessionEventDropDown.RegisterValueChangedCallback(evt =>
+            {
+                if (string.IsNullOrEmpty(evt.newValue))
+                    return;
+
+                // TODO: finish reading Json data when this value changes and display in the playSessionListView
+
+                if (!m_eventMetricInfos.ContainsKey(evt.newValue))
+                    return;
+
+                List<GameEvent.RaiseMetric> eventMetrics = m_eventMetricInfos[evt.newValue].GetMetrics();
+
+                m_eventMetricRowRows.Clear();
+                foreach (GameEvent.RaiseMetric metric in eventMetrics)
+                {
+                    m_eventMetricRowRows.Add(new EventMetricRow
+                    {
+                        TimeStamp = metric.TimeStamp(),
+                        UniqueListeners = metric.ListenerCount()
+                    });
+                }
+
+                m_playSessionListView = m_root.Q<MultiColumnListView>("PlaySessionListView");
+
+                m_playSessionListView.columns["TimeStamp"].bindCell = (element, rowIndex) =>
+                {
+                    var row = m_eventMetricRowRows[rowIndex]; (element as Label).text = row.TimeStamp;
+                };
+
+                m_playSessionListView.columns["NumberListeners"].bindCell = (element, rowIndex) =>
+                {
+                    var row = m_eventMetricRowRows[rowIndex]; (element as Label).text = row.UniqueListeners.ToString();
+                };
+                m_playSessionListView.itemsSource = m_eventMetricRowRows;
+                m_playSessionListView.Rebuild();
+            });
+        }
+
+        private void Build_ResetButton()
+        {
+            var ResetButton = m_root.Q<Button>("ResetButton");
+            ResetButton.clicked += Reset;
         }
     }
 }
