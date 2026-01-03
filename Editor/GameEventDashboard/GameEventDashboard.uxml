@@ -1,17 +1,23 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement name="EventMetricControls" style="flex-grow: 0; top: auto; flex-direction: row; flex-shrink: 0;">
-        <ui:Label text="Event Metric Controls" parse-escape-sequences="false" style="justify-content: center; align-items: center; align-self: center;"/>
+    <ui:VisualElement name="TitleElement" style="flex-grow: 1;">
+        <ui:Label text="noCTRL Game Events Dashboard" focusable="false" style="align-self: center; align-items: center; justify-content: space-between; align-content: center; font-size: 30px; -unity-font-style: bold-and-italic; -unity-text-align: upper-left;"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="LoggingControls" style="flex-grow: 1; flex-direction: row; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; align-self: center;">
+        <ui:Toggle label="Metric Tracking" name="MetricTrackingToggle" style="margin-right: 4px; padding-right: 10px;"/>
+        <ui:Toggle label="Dubug Console Logging" name="DubugConsoleLoggingToggle" style="margin-left: 4px; margin-right: 4px; padding-left: 10px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="PlaySessionElements" style="flex-grow: 0; flex-direction: row; padding-top: 1px; padding-right: 10px; padding-bottom: 1px; padding-left: 10px; align-self: center;">
+        <ui:DropdownField label="Play Session" name="PlaySessionDropDown" style="flex-direction: row; flex-wrap: nowrap; width: 323px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="SessonEventElements" style="flex-grow: 1; flex-direction: row; padding-top: 1px; padding-right: 10px; padding-bottom: 1px; padding-left: 10px; align-self: center;">
+        <ui:DropdownField label="Session Event" name="SessionEventDropDown" style="width: 323px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="EventMetricControls" style="flex-grow: 0; top: auto; flex-direction: row; flex-shrink: 0; padding-top: 1px; padding-right: 10px; padding-bottom: 1px; padding-left: 10px; align-self: center;">
         <ui:Button text="Clear Json Data" name="ClearMetricData" style="flex-direction: row;"/>
         <ui:Button text="Open Folder" name="OpenMetricFolder"/>
         <ui:Button text="Reset" triple-click-selects-line="false" name="ResetButton"/>
     </ui:VisualElement>
-    <ui:VisualElement name="PlaySessionElements" style="flex-grow: 0; flex-direction: row;">
-        <ui:DropdownField label="Play Session" name="PlaySessionDropDown" style="flex-direction: row; flex-wrap: nowrap; width: 323px;"/>
-    </ui:VisualElement>
-    <ui:VisualElement name="SessonEventElements" style="flex-grow: 1; flex-direction: row;">
-        <ui:DropdownField label="Session Event" name="SessionEventDropDown" style="width: 323px;"/>
-    </ui:VisualElement>
-    <ui:VisualElement name="PlaySessionView" style="flex-grow: 1;">
+    <ui:VisualElement name="PlaySessionView" style="flex-grow: 1; padding-top: 1px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
         <ui:MultiColumnListView columns="" sort-column-descriptions="" fixed-item-height="20" name="PlaySessionListView" show-alternating-row-backgrounds="All" reorder-mode="Simple" style="height: 235px; width: 486px;">
             <ui:Columns>
                 <ui:Column name="TimeStamp" title="Time Stamp" width="auto" stretchable="true" visible="true"/>
@@ -19,11 +25,11 @@
             </ui:Columns>
         </ui:MultiColumnListView>
     </ui:VisualElement>
-    <ui:VisualElement name="GameEventControls" style="flex-grow: 1; flex-direction: row;">
-        <ui:Label text="Game Event Controls" style="flex-direction: column; justify-content: flex-end; align-content: auto; align-self: center; align-items: auto;"/>
+    <ui:VisualElement name="GameEventControls" style="flex-grow: 1; flex-direction: column; padding-top: 10px; padding-right: 10px; padding-bottom: 1px; padding-left: 10px; align-self: center;">
+        <ui:Label text="Game Event Controls" style="flex-direction: column; justify-content: flex-end; align-content: auto; align-self: center; align-items: auto; font-size: 20px; -unity-font-style: bold-and-italic;"/>
         <ui:Button text="Create New Event" name="GameEventCreateButton"/>
     </ui:VisualElement>
-    <ui:VisualElement name="GameEventView" style="flex-grow: 1;">
+    <ui:VisualElement name="GameEventView" style="flex-grow: 1; padding-top: 1px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
         <ui:MultiColumnListView columns="" sort-column-descriptions="" name="GameEventListView" reorderable="false" show-alternating-row-backgrounds="ContentOnly" fixed-item-height="20" style="height: 215px;">
             <ui:Columns>
                 <ui:Column name="EventName" title="Game Event Name" stretchable="true"/>

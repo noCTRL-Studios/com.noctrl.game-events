@@ -9,8 +9,8 @@ namespace NoCtrl.GameEvents
 
     public class GameEventEditorRegistry : ScriptableObject
     {
-        public bool MetricTracking = true;
-        public bool DebugConsoleLogging = false;
+        [HideInInspector] public bool MetricTracking = true;
+        [HideInInspector] public bool DebugConsoleLogging = false;
 
         private static GameEventEditorRegistry _instance;
 
@@ -25,6 +25,7 @@ namespace NoCtrl.GameEvents
         }
 
         public List<GameEvent> m_registeredEvents = new List<GameEvent>();
+
         private DateTime sessionStartTime;
         private DateTime sessionEndTime;
 

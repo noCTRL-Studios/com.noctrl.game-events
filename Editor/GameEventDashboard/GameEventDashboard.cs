@@ -16,7 +16,6 @@ namespace NoCtrl.GameEvents.Editor
     public class GameEventDashboard : EditorWindow
     {
         [SerializeField] private VisualTreeAsset m_uxml;
-
         private TemplateContainer m_root;
 
         private List<EventMetricRow> m_eventMetricRowRows = new List<EventMetricRow>();
@@ -27,8 +26,10 @@ namespace NoCtrl.GameEvents.Editor
 
         private MultiColumnListView m_gameEventMultiColumnListView;
         private MultiColumnListView m_playSessionListView;
+
         private DropdownField m_playSessionDropDown;
         private DropdownField m_sessionEventDropDown;
+
         // Menu window
         [MenuItem("noCTRL Studios/Game Events Dashboard %#d")]
         public static void ShowWindow()
@@ -56,7 +57,8 @@ Build_SessionEventDropDown();
 Build_ResetButton();
         }
 
-        public void Reset()
+        // ------------------------ Services ------------------------
+        private void Reset()
         {
             if (m_root == null) 
                 return;
@@ -71,7 +73,7 @@ Build_ResetButton();
             PlaySessionListView.Rebuild();
         }
 
-        public void OpenMetricsFolder()
+        private void OpenMetricsFolder()
         {
             var path = GameEventsDefinitions.MetricsDirectory; 
             if (!Directory.Exists(path)) 
@@ -83,8 +85,8 @@ Build_ResetButton();
             var tempString = path + "/";
             EditorUtility.RevealInFinder(tempString);
         }
-
-        public void ClearMetrics()
+        
+        private void ClearMetrics()
         {
             string metricsFolder = GameEventsDefinitions.MetricsDirectory;
             if (!Directory.Exists(metricsFolder)) return;
@@ -171,6 +173,9 @@ SessionEventDropDown.choices.Clear();
             m_activeEventRowRows.Clear();
             foreach (var gameEvent in registeredEventDataList)
             {
+                if (gameEvent == null)
+                    continue;
+
                 m_activeEventRowRows.Add(new ActiveEventRow
                 {
                     EventName = gameEvent.name,
