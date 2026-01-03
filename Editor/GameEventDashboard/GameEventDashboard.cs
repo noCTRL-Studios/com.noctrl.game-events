@@ -31,7 +31,7 @@ namespace NoCtrl.GameEvents.Editor
         {
             GetWindow(typeof(GameEventDashboard), false, "noCTRL Game Events Dashboard");
         }
-
+        
         public void CreateGUI()
         {
             if (m_uxml == null)
@@ -43,30 +43,11 @@ namespace NoCtrl.GameEvents.Editor
             m_root = m_uxml.CloneTree();
             rootVisualElement.Add(m_root);
 
-            var clearButton = m_root.Q<Button>("ClearMetricData");
-            if (clearButton == null)
-            {
-                Debug.LogError("ClearMetricData button not found in UXML.");
-                return;
-            }
-
-            clearButton.clicked += () =>
-            {
-                ClearMetrics();
-                Debug.Log("Game Event metrics cleared.");
-            };
-
-            var OpenFolderButton = m_root.Q<Button>("OpenMetricFolder");
-
-            OpenFolderButton.clicked += () =>
-            {
-                Debug.Log("noCTRL Events Metric Folder Opening...");
-                EditorApplication.delayCall += OpenMetricsFolder;
-
-            };
+            Build_ClearButton();
+            Build_OpenFolderButton();
 
             var registeredEventDataList = GameEventEditorRegistry.Instance.m_registeredEvents;
-            var listView = m_root.Q<MultiColumnListView>("GameEventListView");
+            var GameEventListView = m_root.Q<MultiColumnListView>("GameEventListView");
 
             // Convert JSON metrics into ListView rows
             m_activeEventRowRows.Clear();
@@ -79,19 +60,19 @@ namespace NoCtrl.GameEvents.Editor
                 });
             }
 
-            listView.columns["EventName"].bindCell = (element, rowIndex) =>
+            GameEventListView.columns["EventName"].bindCell = (element, rowIndex) =>
             {
                 var row = m_activeEventRowRows[rowIndex]; (element as Label).text = row.EventName;
             };
 
-            listView.columns["NumberOfListeners"].bindCell = (element, rowIndex) =>
+            GameEventListView.columns["NumberOfListeners"].bindCell = (element, rowIndex) =>
             {
                 var row = m_activeEventRowRows[rowIndex]; (element as Label).text = row.UniqueListeners.ToString();
             };
 
             // Assign data + refresh
-            listView.itemsSource = m_activeEventRowRows;
-            listView.Rebuild();
+            GameEventListView.itemsSource = m_activeEventRowRows;
+            GameEventListView.Rebuild();
 
             var createButton = m_root.Q<Button>("GameEventCreateButton"); createButton.clicked += ShowCreateEventPopup;
 
@@ -257,6 +238,33 @@ SessionEventDropDown.choices.Clear();
             AssetDatabase.SaveAssets(); // Save to data
             EditorGUIUtility.PingObject(asset); // ping project view
             Selection.activeObject = asset; // set active
+        }
+
+        private void Build_ClearButton()
+        {
+            var clearButton = m_root.Q<Button>("ClearMetricData");
+            if (clearButton == null)
+            {
+                Debug.LogError("ClearMetricData button not found in UXML.");
+                return;
+            }
+            clearButton.clicked += () =>
+            {
+                ClearMetrics();
+                Debug.Log("Game Event metrics cleared.");
+            };
+        }
+
+        private void Build_OpenFolderButton()
+        {
+            var OpenFolderButton = m_root.Q<Button>("OpenMetricFolder");
+
+            OpenFolderButton.clicked += () =>
+            {
+                Debug.Log("noCTRL Events Metric Folder Opening...");
+                EditorApplication.delayCall += OpenMetricsFolder;
+
+            };
         }
     }
 }
