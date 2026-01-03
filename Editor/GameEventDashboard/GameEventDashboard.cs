@@ -58,6 +58,7 @@ Build_ResetButton();
         }
 
         // ------------------------ Services ------------------------
+
         private void Reset()
         {
             if (m_root == null) 
@@ -130,7 +131,9 @@ SessionEventDropDown.choices.Clear();
             Selection.activeObject = asset; // set active
         }
 
+
         // ------------------------ Builders ------------------------
+
         private void Build_ClearButton()
         {
             var clearButton = m_root.Q<Button>("ClearMetricData");
