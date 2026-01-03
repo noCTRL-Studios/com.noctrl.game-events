@@ -24,7 +24,7 @@
         <ui:Button text="Create New Event" name="GameEventCreateButton"/>
     </ui:VisualElement>
     <ui:VisualElement name="GameEventView" style="flex-grow: 1;">
-        <ui:MultiColumnListView columns="" sort-column-descriptions="" name="GameEventListView" reorderable="false" show-alternating-row-backgrounds="ContentOnly" style="height: 340px;">
+        <ui:MultiColumnListView columns="" sort-column-descriptions="" name="GameEventListView" reorderable="false" show-alternating-row-backgrounds="ContentOnly" fixed-item-height="20" style="height: 215px;">
             <ui:Columns>
                 <ui:Column name="EventName" title="Game Event Name" stretchable="true"/>
                 <ui:Column name="NumberOfListeners" title="Number Of Active Listeners" stretchable="true"/>
