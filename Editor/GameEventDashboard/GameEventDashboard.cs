@@ -30,6 +30,9 @@ namespace NoCtrl.GameEvents.Editor
         private DropdownField m_playSessionDropDown;
         private DropdownField m_sessionEventDropDown;
 
+        private Toggle m_metricTrackingToggle;
+        private Toggle m_debugConsoleLoggingToggle;
+
         // Menu window
         [MenuItem("noCTRL Studios/Game Events Dashboard %#d")]
         public static void ShowWindow()
@@ -48,6 +51,9 @@ namespace NoCtrl.GameEvents.Editor
             m_root = m_uxml.CloneTree();
             rootVisualElement.Add(m_root);
 
+
+            Build_MetricsTrackingToggle();
+            Build_DebugConsoleLoggingToggle();
             Build_ClearButton();
             Build_OpenFolderButton();
 Build_CreateGameEventButton();
@@ -131,8 +137,39 @@ SessionEventDropDown.choices.Clear();
             Selection.activeObject = asset; // set active
         }
 
+        private void OnMetricsToggleChanged(ChangeEvent<bool> evt)
+        {
+            GameEventEditorRegistry.Instance.MetricTracking = evt.newValue;
+            Debug.Log($"Metrics recording is now {(evt.newValue ? "ENABLED" : "DISABLED")}");
+        }
+
+        private void OnDebugConsoleLoggingToggleToggleChanged(ChangeEvent<bool> evt)
+        {
+            GameEventEditorRegistry.Instance.DebugConsoleLogging = evt.newValue;
+            Debug.Log($"Debug Console Logging recording is now {(evt.newValue ? "ENABLED" : "DISABLED")}");
+        }
 
         // ------------------------ Builders ------------------------
+
+        private void Build_DebugConsoleLoggingToggle()
+        {
+            m_debugConsoleLoggingToggle = m_root.Q<Toggle>("DebugConsoleLoggingToggle");
+
+            // Read the current value from your config/service
+            m_debugConsoleLoggingToggle.SetValueWithoutNotify(GameEventEditorRegistry.Instance.DebugConsoleLogging);
+            // Register callback
+            m_debugConsoleLoggingToggle.RegisterValueChangedCallback(OnDebugConsoleLoggingToggleToggleChanged);
+        }
+
+        private void Build_MetricsTrackingToggle()
+        {
+            m_metricTrackingToggle = m_root.Q<Toggle>("MetricTrackingToggle");
+
+            // Read the current value from your config/service
+            m_metricTrackingToggle.SetValueWithoutNotify(GameEventEditorRegistry.Instance.MetricTracking);
+            // Register callback
+            m_metricTrackingToggle.RegisterValueChangedCallback(OnMetricsToggleChanged);
+        }
 
         private void Build_ClearButton()
         {

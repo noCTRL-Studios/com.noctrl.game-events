@@ -4,7 +4,7 @@
     </ui:VisualElement>
     <ui:VisualElement name="LoggingControls" style="flex-grow: 1; flex-direction: row; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; align-self: center;">
         <ui:Toggle label="Metric Tracking" name="MetricTrackingToggle" style="margin-right: 4px; padding-right: 10px;"/>
-        <ui:Toggle label="Debug Console Logging" name="DubugConsoleLoggingToggle" style="margin-left: 4px; margin-right: 4px; padding-left: 10px;"/>
+        <ui:Toggle label="Debug Console Logging" name="DebugConsoleLoggingToggle" style="margin-left: 4px; margin-right: 4px; padding-left: 10px;"/>
     </ui:VisualElement>
     <ui:VisualElement name="PlaySessionElements" style="flex-grow: 0; flex-direction: row; padding-top: 1px; padding-right: 10px; padding-bottom: 1px; padding-left: 10px; align-self: center;">
         <ui:DropdownField label="Play Session" name="PlaySessionDropDown" style="flex-direction: row; flex-wrap: nowrap; width: 323px;"/>
