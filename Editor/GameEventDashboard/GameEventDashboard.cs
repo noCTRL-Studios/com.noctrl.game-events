@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -17,6 +18,9 @@ namespace NoCtrl.GameEvents.Editor
     {
         [SerializeField] private VisualTreeAsset m_uxml;
         private TemplateContainer m_root;
+
+        private DateTime sessionStartTime;
+        private DateTime sessionEndTime;
 
         private List<EventMetricRow> m_eventMetricRowRows = new List<EventMetricRow>();
         private List<ActiveEventRow> m_activeEventRowRows = new List<ActiveEventRow>();
@@ -51,7 +55,6 @@ namespace NoCtrl.GameEvents.Editor
             m_root = m_uxml.CloneTree();
             rootVisualElement.Add(m_root);
 
-
             Build_MetricsTrackingToggle();
             Build_DebugConsoleLoggingToggle();
             Build_ClearButton();
@@ -63,7 +66,62 @@ Build_SessionEventDropDown();
 Build_ResetButton();
         }
 
+        public void BeginSession()
+        {
+            // sessionStartTime = DateTime.UtcNow;
+        }
+
+        public void EndSession()
+        {
+            // sessionEndTime = DateTime.UtcNow;
+
+            string projectName = Application.productName;
+            string metricsFolder = GameEventsDefinitions.MetricsDirectory;
+
+            if (!Directory.Exists(metricsFolder)) return;
+
+            string[] sessionFolders = Directory.GetDirectories(metricsFolder, $"{projectName}_Session_*");
+
+            foreach (string folder in sessionFolders)
+            {
+                var tempPlaySession = new PlaySessionInfo(folder);
+
+                if (!m_playSessionInfos.ContainsKey(tempPlaySession.FolderName))
+                {
+                    m_playSessionInfos.Add(tempPlaySession.FolderName, tempPlaySession);
+                }
+
+                m_playSessionDropDown.choices.Add(tempPlaySession.FolderName);
+            }
+        }
+
         // ------------------------ Services ------------------------
+
+        private void OnEnable()
+        {
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+
+        private void OnDisable()
+        {
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+        }
+
+        private void OnPlayModeStateChanged(PlayModeStateChange state)
+        {
+            switch (state)
+            {
+                case
+                    PlayModeStateChange.EnteredPlayMode:
+                    BeginSession();
+                    break;
+                case
+                    PlayModeStateChange.ExitingPlayMode:
+                    EndSession();
+                    break;
+
+            }
+        }
 
         private void Reset()
         {
@@ -78,6 +136,25 @@ Build_ResetButton();
             m_eventMetricRowRows.Clear();
             var PlaySessionListView = m_root.Q<MultiColumnListView>("PlaySessionListView");
             PlaySessionListView.Rebuild();
+
+            string projectName = Application.productName;
+            string metricsFolder = GameEventsDefinitions.MetricsDirectory;
+
+            if (!Directory.Exists(metricsFolder)) return;
+
+            string[] sessionFolders = Directory.GetDirectories(metricsFolder, $"{projectName}_Session_*");
+
+            foreach (string folder in sessionFolders)
+            {
+                var tempPlaySession = new PlaySessionInfo(folder);
+
+                if (!m_playSessionInfos.ContainsKey(tempPlaySession.FolderName))
+                {
+                    m_playSessionInfos.Add(tempPlaySession.FolderName, tempPlaySession);
+                }
+
+                m_playSessionDropDown.choices.Add(tempPlaySession.FolderName);
+            }
         }
 
         private void OpenMetricsFolder()
