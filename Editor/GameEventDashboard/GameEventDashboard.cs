@@ -59,11 +59,11 @@ namespace NoCtrl.GameEvents.Editor
             Build_DebugConsoleLoggingToggle();
             Build_ClearButton();
             Build_OpenFolderButton();
-Build_CreateGameEventButton();
-Build_GameEventMultiColumnListView();
-Build_PlaySessionDropDown();
-Build_SessionEventDropDown();
-Build_ResetButton();
+            Build_CreateGameEventButton();
+            Build_GameEventMultiColumnListView();
+            Build_PlaySessionDropDown();
+            Build_SessionEventDropDown();
+            Build_ResetButton();
         }
 
         public void BeginSession()

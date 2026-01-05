@@ -18,7 +18,7 @@
         <ui:Button text="Reset" triple-click-selects-line="false" name="ResetButton"/>
     </ui:VisualElement>
     <ui:VisualElement name="PlaySessionView" style="flex-grow: 1; padding-top: 1px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
-        <ui:MultiColumnListView columns="" sort-column-descriptions="" fixed-item-height="20" name="PlaySessionListView" show-alternating-row-backgrounds="All" reorder-mode="Simple" style="min-height: 200px; max-height: 500px;">
+        <ui:MultiColumnListView columns="" sort-column-descriptions="" fixed-item-height="20" name="PlaySessionListView" show-alternating-row-backgrounds="All" reorder-mode="Simple" style="min-height: 100px; max-height: 200px;">
             <ui:Columns stretch-mode="GrowAndFill">
                 <ui:Column name="TimeStamp" title="Time Stamp" width="auto" stretchable="true" visible="true"/>
                 <ui:Column name="NumberListeners" title="Number Of Listeners" stretchable="true" width="auto"/>
@@ -29,7 +29,7 @@
         <ui:Label text="Game Event Controls" style="flex-direction: column; justify-content: flex-end; align-content: auto; align-self: center; align-items: auto; font-size: 20px; -unity-font-style: bold-and-italic;"/>
         <ui:Button text="Create New Event" name="GameEventCreateButton"/>
     </ui:VisualElement>
-    <ui:VisualElement name="GameEventView" style="flex-grow: 1; padding-top: 1px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+    <ui:VisualElement name="GameEventView" style="flex-grow: 1; padding-top: 1px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; max-height: 200px; min-height: 100px;">
         <ui:MultiColumnListView columns="" sort-column-descriptions="" name="GameEventListView" reorderable="false" show-alternating-row-backgrounds="ContentOnly" fixed-item-height="20" style="height: 215px;">
             <ui:Columns>
                 <ui:Column name="EventName" title="Game Event Name" stretchable="true"/>
