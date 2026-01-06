@@ -7,7 +7,6 @@ using System.IO;
 
 
 #if UNITY_EDITOR
-using Codice.Client.Common;
 using UnityEditor;
 using NoCtrl.GameEvents;
 #endif
